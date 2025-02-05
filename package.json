@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kalviumcommunity/S64_Conspiracy_Theory/issues"
   },
-  "homepage": "https://github.com/kalviumcommunity/S64_Conspiracy_Theory#readme"
+  "homepage": "https://github.com/kalviumcommunity/S64_Conspiracy_Theory#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
 }
