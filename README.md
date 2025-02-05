@@ -26,7 +26,8 @@ Deployment: Vercel (Frontend), Render (Backend)
 
 📌 Why This Project?
 
-I've chosen this project because it aligns perfectly with my ASAP project goals while allowing me to experiment with full-stack technologies in a fun way. It will help me:
+I've chosen this project because it aligns perfectly with my ASAP project goals while allowing me to experiment with full-stack technologies in a fun way. It will help me in the following:
+
 ✅ Strengthen my React and API development skills
 ✅ Implement user authentication and database operations
 ✅ Deploy a full-stack web application using modern tools
