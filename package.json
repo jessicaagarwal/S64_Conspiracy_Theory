@@ -1,0 +1,19 @@
+{
+  "name": "s64_conspiracy_theory",
+  "version": "1.0.0",
+  "description": "📌 Project Title:\r Conspiracy Theory Generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalviumcommunity/S64_Conspiracy_Theory.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kalviumcommunity/S64_Conspiracy_Theory/issues"
+  },
+  "homepage": "https://github.com/kalviumcommunity/S64_Conspiracy_Theory#readme"
+}
