@@ -30,10 +30,10 @@ Deployment: Vercel (Frontend), Render (Backend)
 
 I've chosen this project because it aligns perfectly with my ASAP project goals while allowing me to experiment with full-stack technologies in a fun way. It will help me in the following:
 
-✅ Strengthen my React and API development skills
-✅ Implement user authentication and database operations
-✅ Deploy a full-stack web application using modern tools
-✅ Improve my API testing and debugging skills
-✅ Work with GitHub for version control and deploy a live project
+✅ Strengthen my React and API development skills.
+✅ Implement user authentication and database operations.
+✅ Deploy a full-stack web application using modern tools.
+✅ Improve my API testing and debugging skills.
+✅ Work with GitHub for version control and deploy a live project.
 
 Since I enjoy creative projects, this one will be a quirky and enjoyable way to learn backend and frontend integration, making it a perfect mix of technical growth and fun! 🚀
