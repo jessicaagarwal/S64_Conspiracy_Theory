@@ -36,4 +36,4 @@ I've chosen this project because it aligns perfectly with my ASAP project goals 
 ✅ Improve my API testing and debugging skills
 ✅ Work with GitHub for version control and deploy a live project
 
-Since I enjoy creative projects, this one will be a quirky and enjoyable way to learn backend and frontend integration, making it a perfect mix of technical growth and fun! 
+Since I enjoy creative projects, this one will be a quirky and enjoyable way to learn backend and frontend integration, making it a perfect mix of technical growth and fun! 🚀

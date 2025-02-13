@@ -1,0 +1,19 @@
+meta {
+  name: put
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:3000/api/users/67ad83d966a7ca00f701ea4c
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "lieSeeker101",
+    "email": "truthseeker101@example.com",
+    "password": "hashed_password_here"
+  }
+}
