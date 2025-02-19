@@ -12,14 +12,12 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
-// Use Centralized Routes
 app.use('/api', routes);
 
 app.get('/ping', (req, res) => {
     res.json({ message: 'Pong!' });
 });
 
-// Global Error Handling Middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });

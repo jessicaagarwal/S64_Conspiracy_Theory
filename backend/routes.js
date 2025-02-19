@@ -1,6 +1,5 @@
 const express = require('express');
 
-// Import All Routes
 const aiGeneratedTheoriesRoutes = require('./routes/aiGeneratedTheoryRoutes');
 const activityLogsRoutes = require('./routes/activityLogRoutes');
 const adminsRoutes = require('./routes/adminRoutes');
@@ -14,7 +13,6 @@ const usersRoutes = require('./routes/userRoutes');
 
 const router = express.Router();
 
-// Use Routes
 router.use('/theories', theoriesRoutes);
 router.use('/ai-generated-theories', aiGeneratedTheoriesRoutes);
 router.use('/activity-logs', activityLogsRoutes);
