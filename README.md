@@ -1,4 +1,7 @@
+📌 Deployments:
+
 Render Deployment Link: https://s64-conspiracy-theory.onrender.com
+Cloudflare Deployment Link: [Live Demo] (https://s64-conspiracy-theoryy.pages.dev/)
 
 📌 Project Title:
 Conspiracy Theory Generator
