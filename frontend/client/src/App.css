@@ -654,6 +654,21 @@ header h1::after {
   box-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
 }
 
+/* Global CSS Reset */
+ul {
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+}
+
+a {
+  text-decoration: none; /* Remove underlines */
+}
+
+a:hover {
+  text-decoration: none; /* Ensure no underline on hover */
+}
+
 /* Media Queries */
 @media screen and (max-width: 768px) {
   .text-4xl {

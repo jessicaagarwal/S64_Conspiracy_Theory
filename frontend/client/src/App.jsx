@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import AuthPage from './pages/AuthPage';
 import './App.css';
 
 function App() {
@@ -12,9 +13,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          {/* Additional routes can be added here */}
-          {/* <Route path="/saved" element={<SavedTheoriesPage />} /> */}
-          {/* <Route path="/about" element={<AboutPage />} /> */}
+          <Route path="/auth" element={<AuthPage/>} />
         </Routes>
         <Footer />
       </div>
