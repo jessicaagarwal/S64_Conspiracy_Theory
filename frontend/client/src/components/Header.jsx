@@ -27,7 +27,14 @@ const Header = () => {
                   Home
                 </Link>
               </li>
-              
+              <li className="whitespace-nowrap">
+                <Link 
+                  to="/trending" 
+                  className="text-gray-400 hover:text-indigo-400 transition-colors px-2 py-1 md:px-3 md:py-2 text-sm md:text-base"
+                >
+                  Trending
+                </Link>
+              </li>
               {currentUser ? (
                 <>
                   <li className="whitespace-nowrap">
@@ -44,7 +51,8 @@ const Header = () => {
                         @{currentUser.username}
                       </span>
                       <button 
-                        className="text-gray-400 hover:text-indigo-400 transition-colors px-2 py-1 md:px-3 md:py-2 text-sm md:text-base"
+                        // className="text-gray-500 hover:text-indigo-400 transition-colors px-2 py-1 md:px-3 md:py-2 text-sm md:text-base rounded-full border border-gray-600 bg-gray-700"
+                        className="hidden md:inline text-xs px-2 py-1 bg-gray-800 rounded-full text-indigo-400 border border-indigo-600"
                         onClick={() => logout()}
                       >
                         Logout
