@@ -6,12 +6,25 @@ const routes = require('./routes');
 
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 connectDB();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: function(origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if(!origin) return callback(null, true);
+        
+        // Allow requests from any localhost port
+        if(origin.startsWith('http://localhost:')) {
+            return callback(null, true);
+        }
+        
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+}));
 
 app.use('/api', routes);
 

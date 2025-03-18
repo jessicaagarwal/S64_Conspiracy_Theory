@@ -578,6 +578,7 @@ button:hover::after {
   backdrop-filter: blur(4px);
   border: 1px solid rgba(114, 76, 249, 0.2);
   transition: all 0.3s ease;
+  margin-bottom: 10px;
 }
 
 .theory-card::before {

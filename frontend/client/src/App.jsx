@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
 import './App.css';
+import UserDashboard from './pages/UserDashboard';
+import TrendingTheoriesPage from './pages/TrendingTheoriesPage';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage/>} />
           <Route path="/auth" element={<AuthPage/>} />
+          <Route path="/dashboard" element={<UserDashboard/>} />
+          <Route path="/trending" element={<TrendingTheoriesPage/>} />
         </Routes>
         <Footer />
       </div>
