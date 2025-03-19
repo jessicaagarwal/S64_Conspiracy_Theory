@@ -7,6 +7,7 @@ import AuthPage from './pages/AuthPage';
 import './App.css';
 import UserDashboard from './pages/UserDashboard';
 import TrendingTheoriesPage from './pages/TrendingTheoriesPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/auth" element={<AuthPage/>} />
           <Route path="/dashboard" element={<UserDashboard/>} />
           <Route path="/trending" element={<TrendingTheoriesPage/>} />
+          <Route path="/profile" element={<ProfilePage/>} />
         </Routes>
         <Footer />
       </div>

@@ -10,6 +10,7 @@ const AuthPage = () => {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { login, register } = useAuth();
   const navigate = useNavigate();
 
@@ -106,7 +107,7 @@ const AuthPage = () => {
               <div className="relative">
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   className="w-full bg-gray-700 p-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                   placeholder="••••••••••••"
                   value={password}
@@ -116,9 +117,13 @@ const AuthPage = () => {
               </div>
               {isLogin && (
                 <div className="flex justify-end mt-2">
-                  <a href="#forgot" className="text-xs text-indigo-400 hover:text-indigo-300">
-                    Declassify password
-                  </a>
+                  <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)} 
+                    className="text-xs text-indigo-400 hover:text-indigo-300"
+                  >
+                    {showPassword ? "Classify password" : "Declassify password"}
+                  </button>
                 </div>
               )}
             </div>

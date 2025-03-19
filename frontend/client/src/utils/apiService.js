@@ -2,7 +2,7 @@
  * API Service for communicating with the backend
  */
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 
 /**
  * Register a new user
@@ -126,6 +126,39 @@ export const updateUserProfile = async (id, userData) => {
     return data;
   } catch (error) {
     console.error('Error updating user profile:', error);
+    throw error;
+  }
+};
+
+/**
+ * Delete a user account
+ * @param {string} id - The user ID to delete
+ * @returns {Promise<Object>} The response from the server
+ */
+export const deleteUser = async (id) => {
+  try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error deleting user account:', error);
     throw error;
   }
 };
