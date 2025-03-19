@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { loginUser, registerUser, getUserProfile } from './apiService';
 
 const AuthContext = createContext();
 
@@ -8,38 +9,49 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is logged in when the app loads
   useEffect(() => {
-    // Check localStorage or cookies for auth token
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      // Validate token with your backend
-      // For now, we'll just simulate a logged-in user
-      setCurrentUser({
-        username: 'Agent',
-        email: 'agent@example.com',
-        // other user data
-      });
-    }
-    setLoading(false);
+    const verifyToken = async () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          // Validate token with backend
+          const userData = await getUserProfile();
+          setCurrentUser(userData);
+        } catch (error) {
+          console.error('Error verifying token:', error);
+          // If token is invalid, remove it
+          localStorage.removeItem('authToken');
+        }
+      }
+      setLoading(false);
+    };
+
+    verifyToken();
   }, []);
 
   // Login function
   const login = async (email, password) => {
-    // Call your authentication API
-    // For demo purposes:
-    const user = { username: 'Agent', email };
-    setCurrentUser(user);
-    localStorage.setItem('authToken', 'demo-token');
-    return user;
+    try {
+      const userData = await loginUser(email, password);
+      setCurrentUser(userData);
+      localStorage.setItem('authToken', userData.token);
+      return userData;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   // Register function
   const register = async (username, email, password) => {
-    // Call your registration API
-    // For demo purposes:
-    const user = { username, email };
-    setCurrentUser(user);
-    localStorage.setItem('authToken', 'demo-token');
-    return user;
+    try {
+      const userData = await registerUser(username, email, password);
+      setCurrentUser(userData);
+      localStorage.setItem('authToken', userData.token);
+      return userData;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   };
 
   // Logout function

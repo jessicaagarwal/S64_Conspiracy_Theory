@@ -2,7 +2,164 @@
  * API Service for communicating with the backend
  */
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:3001/api';
+
+/**
+ * Register a new user
+ * @param {string} username - The username
+ * @param {string} email - The email
+ * @param {string} password - The password
+ * @returns {Promise<Object>} The user object with token
+ */
+export const registerUser = async (username, email, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, email, password }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw error;
+  }
+};
+
+/**
+ * Login a user
+ * @param {string} email - The email
+ * @param {string} password - The password
+ * @returns {Promise<Object>} The user object with token
+ */
+export const loginUser = async (email, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error logging in:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get the authenticated user's profile
+ * @returns {Promise<Object>} The user object
+ */
+export const getUserProfile = async () => {
+  try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/users/profile`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update the user's profile
+ * @param {string} id - The user ID
+ * @param {Object} userData - The updated user data
+ * @returns {Promise<Object>} The updated user object
+ */
+export const updateUserProfile = async (id, userData) => {
+  try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get user-specific theories
+ * @returns {Promise<Array>} Array of theory objects
+ */
+export const getUserTheories = async () => {
+  try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/theories/user`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user theories:', error);
+    throw error;
+  }
+};
 
 /**
  * Fetch all theories from the backend
@@ -31,10 +188,13 @@ export const fetchTheories = async () => {
  */
 export const createTheory = async (theory) => {
   try {
+    const token = localStorage.getItem('authToken');
+    
     const response = await fetch(`${API_BASE_URL}/theories`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
       },
       body: JSON.stringify(theory),
     });
@@ -59,10 +219,17 @@ export const createTheory = async (theory) => {
  */
 export const updateTheory = async (id, theory) => {
   try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
     const response = await fetch(`${API_BASE_URL}/theories/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify(theory),
     });
@@ -86,8 +253,17 @@ export const updateTheory = async (id, theory) => {
  */
 export const deleteTheory = async (id) => {
   try {
+    const token = localStorage.getItem('authToken');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
     const response = await fetch(`${API_BASE_URL}/theories/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
     });
     
     if (!response.ok) {
