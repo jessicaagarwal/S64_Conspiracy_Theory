@@ -77,11 +77,19 @@ const UserDashboard = () => {
 
   return (
     <div className="container py-8 px-4">
-      <h1 className="text-3xl title-font mb-8 text-center">
-        <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
-          Your Conspiracy Dashboard
-        </span>
-      </h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl title-font text-center">
+          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
+            Your Conspiracy Dashboard
+          </span>
+        </h1>
+        <button 
+          onClick={() => navigate('/profile')}
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors"
+        >
+          Account Settings
+        </button>
+      </div>
       
       {error && (
         <div className="bg-red-900 text-red-200 p-4 rounded-lg mb-6 text-center">

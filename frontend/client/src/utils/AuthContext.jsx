@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { loginUser, registerUser, getUserProfile } from './apiService';
+import { loginUser, registerUser, getUserProfile, updateUserProfile, deleteUser } from './apiService';
 
 const AuthContext = createContext();
 
@@ -60,11 +60,49 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('authToken');
   };
 
+  // Update user function
+  const updateUser = async (userData) => {
+    try {
+      if (!currentUser) {
+        throw new Error('No user is currently logged in');
+      }
+      
+      const updatedUser = await updateUserProfile(currentUser._id, userData);
+      setCurrentUser({
+        ...currentUser,
+        ...updatedUser
+      });
+      return updatedUser;
+    } catch (error) {
+      console.error('Update user error:', error);
+      throw error;
+    }
+  };
+
+  // Delete user function
+  const deleteUserAccount = async () => {
+    try {
+      if (!currentUser) {
+        throw new Error('No user is currently logged in');
+      }
+      
+      await deleteUser(currentUser._id);
+      // After successful deletion, log out the user
+      logout();
+      return { success: true };
+    } catch (error) {
+      console.error('Delete user error:', error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     login,
     register,
     logout,
+    updateUser,
+    deleteUserAccount,
     loading
   };
 
