@@ -2,13 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
-import TheoryDisplay from '../components/TheoryDisplay';
+import { getUserTheories, deleteTheory } from '../utils/apiService';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const UserDashboard = () => {
   const [userTheories, setUserTheories] = useState([]);
   const [savedTheories, setSavedTheories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -20,22 +21,25 @@ const UserDashboard = () => {
 
     const fetchUserContent = async () => {
       try {
-        // Mock data for demonstration
-        const userGeneratedTheories = [
-          { id: 1, title: 'The Moon Landing Hoax', content: 'Evidence suggests the moon landing was filmed in a classified studio with help from Stanley Kubrick...', createdBy: currentUser.uid, likes: 45, shares: 12 },
-          { id: 2, title: 'Secret Government Projects', content: 'Declassified documents reveal experiments with mind control techniques and weather manipulation...', createdBy: currentUser.uid, likes: 23, shares: 5 }
-        ];
+        setIsLoading(true);
+        setError('');
         
+        // Fetch user's theories from the backend
+        const theories = await getUserTheories();
+        setUserTheories(theories);
+        
+        // For now, we'll keep using mock data for saved theories
+        // In a real app, you would have an API endpoint for saved/liked theories
         const userSavedTheories = [
           { id: 3, title: 'Ancient Aliens', content: 'The pyramids show evidence of extraterrestrial technology beyond what ancient humans should have possessed...', createdBy: 'user123', likes: 120, shares: 67 },
           { id: 4, title: 'The Illuminati', content: 'Tracing the secret society through history reveals connections to global financial institutions...', createdBy: 'user456', likes: 89, shares: 31 }
         ];
         
-        setUserTheories(userGeneratedTheories);
         setSavedTheories(userSavedTheories);
-        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching user content:', error);
+        setError('Failed to load your theories. Please try again later.');
+      } finally {
         setIsLoading(false);
       }
     };
@@ -43,11 +47,20 @@ const UserDashboard = () => {
     fetchUserContent();
   }, [currentUser, navigate]);
 
-  const handleDeleteTheory = (id, isUserGenerated = true) => {
-    if (isUserGenerated) {
-      setUserTheories(userTheories.filter(theory => theory.id !== id));
-    } else {
-      setSavedTheories(savedTheories.filter(theory => theory.id !== id));
+  const handleDeleteTheory = async (id, isUserGenerated = true) => {
+    try {
+      if (isUserGenerated) {
+        // Delete the theory from the backend
+        await deleteTheory(id);
+        // Update the state after successful deletion
+        setUserTheories(userTheories.filter(theory => theory._id !== id));
+      } else {
+        // For saved theories (mock data for now)
+        setSavedTheories(savedTheories.filter(theory => theory.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting theory:', error);
+      setError('Failed to delete theory. Please try again later.');
     }
   };
 
@@ -56,7 +69,7 @@ const UserDashboard = () => {
   };
 
   const handleShareTheory = (id) => {
-    // In a real app, this would open sharing options
+    // In a real app, this would open sharing options or call a share API
     alert(`Theory with ID ${id} shared!`);
   };
 
@@ -70,12 +83,18 @@ const UserDashboard = () => {
         </span>
       </h1>
       
+      {error && (
+        <div className="bg-red-900 text-red-200 p-4 rounded-lg mb-6 text-center">
+          {error}
+        </div>
+      )}
+      
       <section className="mb-12">
         <h2 className="text-2xl font-bold mb-4 text-indigo-400">Your Theories</h2>
         {userTheories.length > 0 ? (
           <div className="space-y-3">
             {userTheories.map(theory => (
-              <div key={theory.id} className="theory-card bg-gray-800 rounded-xl p-6 shadow-lg">
+              <div key={theory._id} className="theory-card bg-gray-800 rounded-xl p-6 shadow-lg">
                 <h3 className="text-xl font-semibold mb-2">{theory.title}</h3>
                 <p className="text-gray-300 mb-4" dangerouslySetInnerHTML={{ __html: theory.content }}></p>
                 <div className="flex items-center text-sm text-gray-400 mb-4">
@@ -95,13 +114,13 @@ const UserDashboard = () => {
                 </div>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => handleEditTheory(theory.id)} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-100 rounded transition-colors">
+                  <button onClick={() => handleEditTheory(theory._id)} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-100 rounded transition-colors">
                     Edit
                   </button>
-                  <button onClick={() => handleDeleteTheory(theory.id)} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-100 rounded transition-colors">
+                  <button onClick={() => handleDeleteTheory(theory._id)} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-100 rounded transition-colors">
                     Delete
                   </button>
-                  <button onClick={() => handleShareTheory(theory.id)} className="btn-share px-4 py-2 rounded transition-colors">
+                  <button onClick={() => handleShareTheory(theory._id)} className="btn-share px-4 py-2 rounded transition-colors">
                     Share
                   </button>
                 </div>
