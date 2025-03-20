@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
-const { protect, generateToken } = require("../middleware/authMiddleware");
+const { protect, protectAdmin, generateToken } = require("../middleware/authMiddleware");
 const ActivityLog = require("../models/ActivityLog");
 
 // @route   POST /api/users/register
@@ -110,8 +110,8 @@ router.get("/profile", protect, async (req, res) => {
 
 // @route   GET /api/users
 // @desc    Get all users
-// @access  Private/Admin (for now, all authenticated users)
-router.get("/", protect, async (req, res) => {
+// @access  Private/Admin
+router.get("/", protectAdmin, async (req, res) => {
   try {
     const users = await User.find().select("-password");
     res.json(users);

@@ -5,13 +5,14 @@ import {useNavigate} from 'react-router-dom';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isAdminMode, setIsAdminMode] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { login, register } = useAuth();
+  const { login, register, adminLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -20,17 +21,33 @@ const AuthPage = () => {
     setError('');
     
     try {
-      if (isLogin) {
+      if (isAdminMode) {
+        // Admin login
+        await adminLogin(username, password);
+        navigate('/admin');
+      } else if (isLogin) {
+        // User login
         await login(email, password);
+        navigate('/dashboard');
       } else {
+        // User registration
         await register(username, email, password);
+        navigate('/dashboard');
       }
-      navigate('/dashboard');
     } catch (err) {
       setError('Authentication failed. Trust no one, try again.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleAdminMode = () => {
+    setIsAdminMode(!isAdminMode);
+    setError('');
+    // Reset form fields when toggling modes
+    setEmail('');
+    setPassword('');
+    setUsername('');
   };
 
   return (
@@ -39,12 +56,19 @@ const AuthPage = () => {
         {/* Logo/Header Section */}
         <div className="text-center mb-8">
           <h1 className="title-font text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text mb-2">
-            {isLogin ? 'Access The Archives' : 'Join The Illuminated'}
+            {isAdminMode 
+              ? 'Overseer Access' 
+              : isLogin 
+                ? 'Access The Archives' 
+                : 'Join The Illuminated'
+            }
           </h1>
           <p className="text-gray-400 text-sm">
-            {isLogin 
-              ? 'Enter your credentials to access classified information' 
-              : 'Create your secure identity to document the truth'
+            {isAdminMode
+              ? 'Enter your overseer credentials to monitor the network'
+              : isLogin 
+                ? 'Enter your credentials to access classified information' 
+                : 'Create your secure identity to document the truth'
             }
           </p>
         </div>
@@ -58,8 +82,8 @@ const AuthPage = () => {
           
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3">
-            {/* Username field - only for signup */}
-            {!isLogin && (
+            {/* Username field - for signup or admin login */}
+            {(!isLogin || isAdminMode) && (
               <div className='usernamediv'>
                 <label className="block text-gray-300 text-sm mb-2" htmlFor="username">
                   Codename
@@ -75,29 +99,31 @@ const AuthPage = () => {
                     placeholder="Your unique identifier"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required={!isLogin}
+                    required={!isLogin || isAdminMode}
                   />
                 </div>
               </div>
             )}
             
-            {/* Email field */}
-            <div>
-              <label className="block text-gray-300 text-sm mb-2" htmlFor="email">
-                Secure Channel
-              </label>
-              <div className="relative">
-                <input
-                  id="email"
-                  type="email"
-                  className="w-full bg-gray-700 p-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                  placeholder="your-eyes-only@domain.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
+            {/* Email field - only for regular user login/signup */}
+            {!isAdminMode && (
+              <div>
+                <label className="block text-gray-300 text-sm mb-2" htmlFor="email">
+                  Secure Channel
+                </label>
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    className="w-full bg-gray-700 p-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                    placeholder="your-eyes-only@domain.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required={!isAdminMode}
+                  />
+                </div>
               </div>
-            </div>
+            )}
             
             {/* Password field */}
             <div>
@@ -150,21 +176,40 @@ const AuthPage = () => {
                   <span>Establishing secure connection...</span>
                 </span>
               ) : (
-                <span>{isLogin ? 'Access Archives' : 'Create Secure Identity'}</span>
+                <span>
+                  {isAdminMode 
+                    ? 'Access Overseer Panel' 
+                    : isLogin 
+                      ? 'Access Archives' 
+                      : 'Create Secure Identity'
+                  }
+                </span>
               )}
             </button>
           </form>
         </div>
         
         {/* Toggle between login/signup */}
-        <div className="text-center">
+        <div className="text-center space-y-2">
+          {!isAdminMode && (
+            <p className="text-gray-400 text-sm">
+              {isLogin ? "Don't have clearance yet?" : "Already one of us?"}
+              <button
+                onClick={() => setIsLogin(!isLogin)}
+                className="ml-2 text-indigo-400 hover:text-indigo-300 font-medium"
+              >
+                {isLogin ? 'Request Access' : 'Verify Identity'}
+              </button>
+            </p>
+          )}
+          
           <p className="text-gray-400 text-sm">
-            {isLogin ? "Don't have clearance yet?" : "Already one of us?"}
+            {isAdminMode ? "Not an overseer?" : "Overseer access?"}
             <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 text-indigo-400 hover:text-indigo-300 font-medium"
+              onClick={toggleAdminMode}
+              className="ml-2 text-red-400 hover:text-red-300 font-medium"
             >
-              {isLogin ? 'Request Access' : 'Verify Identity'}
+              {isAdminMode ? 'Standard Access' : 'Overseer Login'}
             </button>
           </p>
         </div>

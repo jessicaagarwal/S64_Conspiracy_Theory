@@ -310,3 +310,225 @@ export const deleteTheory = async (id) => {
     throw error;
   }
 };
+
+/**
+ * Login as an admin
+ * @param {string} username - The admin username
+ * @param {string} password - The admin password
+ * @returns {Promise<Object>} The admin object with token
+ */
+export const loginAdmin = async (username, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/admins/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error logging in as admin:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all users (admin only)
+ * @returns {Promise<Array>} Array of user objects
+ */
+export const getAllUsers = async () => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    if (!token) {
+      throw new Error('No admin authentication token found');
+    }
+    
+    const response = await fetch(`${API_BASE_URL}/users`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching all users:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all theories by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of theory objects
+ */
+export const getTheoriesByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/theories/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user theories:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all comments by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of comment objects
+ */
+export const getCommentsByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/comments/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user comments:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all likes by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of like objects
+ */
+export const getLikesByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/likes/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user likes:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all shares by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of share objects
+ */
+export const getSharesByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/shares/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user shares:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all reports by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of report objects
+ */
+export const getReportsByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/reports/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user reports:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get all activity logs by a specific user
+ * @param {string} userId - The user ID
+ * @returns {Promise<Array>} Array of activity log objects
+ */
+export const getActivityLogsByUser = async (userId) => {
+  try {
+    const token = localStorage.getItem('adminToken');
+    
+    const response = await fetch(`${API_BASE_URL}/activity-logs/by-user/${userId}`, {
+      headers: {
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user activity logs:', error);
+    throw error;
+  }
+};
