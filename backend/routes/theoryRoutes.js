@@ -2,20 +2,35 @@ const express = require("express");
 const router = express.Router();
 const Theory = require("../models/Theory");
 const Tag = require("../models/Tag");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, protectAdmin } = require("../middleware/authMiddleware");
 const ActivityLog = require("../models/ActivityLog");
 
 // Get all theories
 router.get("/", async (req, res) => {
   try {
-    const theories = await Theory.find().populate("tags createdBy");
+    // Check if userId query parameter is provided
+    const { userId } = req.query;
+    
+    // If userId is provided, filter theories by that user
+    const filter = userId ? { createdBy: userId } : {};
+    
+    const theories = await Theory.find(filter).populate("tags createdBy");
     res.json(theories);
   } catch (error) {
     console.error("Error fetching theories:", error);
     res.status(500).json({ message: "Error fetching theories", error: error.message });
   }
 });
-
+// Get theories by specific user ID (admin only)
+router.get("/by-user/:userId", protectAdmin, async (req, res) => {
+  try {
+    const theories = await Theory.find({ createdBy: req.params.userId }).populate("tags createdBy");
+    res.json(theories);
+  } catch (error) {
+    console.error("Error fetching user theories:", error);
+    res.status(500).json({ message: "Error fetching user theories", error: error.message });
+  }
+});
 // Get theories created by the authenticated user
 router.get("/user", protect, async (req, res) => {
   try {
