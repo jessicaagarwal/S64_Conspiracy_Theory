@@ -6,9 +6,16 @@ const TheoryDisplay = ({ theory }) => {
     typeof tag === 'string' ? tag : tag.name || 'Unknown'
   )) || [];
   
-  const createdBy = theory.createdBy ? 
-    (typeof theory.createdBy === 'string' ? theory.createdBy : theory.createdBy.username || 'Anonymous') : 
-    'Anonymous';
+  // Enhanced user validation to ensure we display username when available
+  let createdBy = 'Anonymous';
+  if (theory.createdBy) {
+    if (typeof theory.createdBy === 'object' && theory.createdBy.username) {
+      createdBy = theory.createdBy.username;
+    } else if (typeof theory.createdBy === 'string') {
+      // If it's just an ID, we'll display 'User' instead of the raw ID
+      createdBy = 'User';
+    }
+  }
   
   const createdAt = theory.createdAt ? new Date(theory.createdAt).toLocaleDateString() : '';
   
