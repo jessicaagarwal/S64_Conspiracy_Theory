@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 // Get theories created by the authenticated user
 router.get("/user", protect, async (req, res) => {
   try {
-    const theories = await Theory.find({ createdBy: req.user._id }).populate("tags");
+    const theories = await Theory.find({ createdBy: req.user._id }).populate("tags createdBy");
     res.json(theories);
   } catch (error) {
     console.error("Error fetching user theories:", error);
@@ -67,8 +67,8 @@ router.post("/", protect, async (req, res) => {
       action: "Created theory"
     });
     
-    // Populate the tags for the response
-    const populatedTheory = await Theory.findById(newTheory._id).populate("tags");
+    // Populate the tags and createdBy for the response
+    const populatedTheory = await Theory.findById(newTheory._id).populate("tags createdBy");
     
     res.json(populatedTheory);
   } catch (error) {
@@ -119,7 +119,7 @@ router.put("/:id", protect, async (req, res) => {
       theoryData.tags = tagIds;
     }
     
-    const updatedTheory = await Theory.findByIdAndUpdate(req.params.id, theoryData, { new: true }).populate("tags");
+    const updatedTheory = await Theory.findByIdAndUpdate(req.params.id, theoryData, { new: true }).populate("tags createdBy");
     
     // Log activity
     await ActivityLog.create({
