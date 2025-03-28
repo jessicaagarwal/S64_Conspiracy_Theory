@@ -51,10 +51,11 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// @route   POST /api/users/login
-// @desc    Authenticate a user
-// @access  Public
 router.post("/login", async (req, res) => {
+  // @route   POST /api/users/login
+  // @desc    Authenticate a user
+  // @access  Public
+
   try {
     const { email, password } = req.body;
 
@@ -90,10 +91,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// @route   GET /api/users/profile
-// @desc    Get user profile
-// @access  Private
+router.post("/logout", (req, res) => {
+  // @route   POST /api/users/logout
+  // @desc    Logout a user
+  // @access  Public
+  res.clearCookie('username');
+  res.json({ message: "Logged out successfully" });
+});
+
 router.get("/profile", protect, async (req, res) => {
+
   try {
     const user = await User.findById(req.user._id).select("-password");
     
