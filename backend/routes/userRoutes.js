@@ -36,7 +36,13 @@ router.post("/register", async (req, res) => {
         action: "User registered"
       });
 
-      res.status(201).json({
+    res.cookie('token', generateToken(user._id), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Set to true in production
+        sameSite: 'Strict', // Adjust as necessary
+    });
+    res.status(201).json({
+
         _id: user._id,
         username: user.username,
         email: user.email,
@@ -95,7 +101,8 @@ router.post("/logout", (req, res) => {
   // @route   POST /api/users/logout
   // @desc    Logout a user
   // @access  Public
-  res.clearCookie('username');
+  res.clearCookie('token');
+
   res.json({ message: "Logged out successfully" });
 });
 
@@ -106,6 +113,12 @@ router.get("/profile", protect, async (req, res) => {
     
     if (user) {
       res.json(user);
+      res.cookie('token', generateToken(req.user._id), {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production', // Set to true in production
+          sameSite: 'Strict', // Adjust as necessary
+      });
+
     } else {
       res.status(404).json({ message: "User not found" });
     }
