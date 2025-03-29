@@ -14,7 +14,17 @@ const protect = async (req, res, next) => {
     try {
       // Get token from header
       token = req.headers.authorization.split(' ')[1];
+    } catch (error) {
+      console.error(error);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
+    }
+  } else if (req.cookies.token) {
+    // Check for token in cookies
+    token = req.cookies.token;
+  }
 
+  if (token) {
+    try {
       // Verify token
       const decoded = jwt.verify(token, JWT_SECRET);
 
@@ -26,9 +36,7 @@ const protect = async (req, res, next) => {
       console.error(error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
@@ -42,7 +50,17 @@ const protectAdmin = async (req, res, next) => {
     try {
       // Get token from header
       token = req.headers.authorization.split(' ')[1];
+    } catch (error) {
+      console.error(error);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
+    }
+  } else if (req.cookies.token) {
+    // Check for token in cookies
+    token = req.cookies.token;
+  }
 
+  if (token) {
+    try {
       // Verify token
       const decoded = jwt.verify(token, JWT_SECRET);
 
@@ -59,9 +77,7 @@ const protectAdmin = async (req, res, next) => {
       console.error(error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
